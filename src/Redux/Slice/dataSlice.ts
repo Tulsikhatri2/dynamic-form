@@ -25,6 +25,31 @@ const initialState: InitialState = {
     isFormError:false
 }
 
+export const getFormData = createAsyncThunk(
+    "GET/FORM/DATA",
+    async()=>{
+        try {
+            const response = await axios.get("https://ulventech-react-exam.netlify.app/api/form")
+            return response.data.data
+        } catch (error) {
+            console.log("Error: ",error)
+        }
+    }
+)
+
+export const postFormData = createAsyncThunk(
+    "POST/FORM/DATA",
+    async (formInfo: { [key: string]: string }) => {
+      try {
+        const response = await axios.post("https://ulventech-react-exam.netlify.app/api/form", formInfo);
+        console.log(response.data,"response");
+        return response.data
+      } catch (error) {
+        console.log("Error: ", error);
+      }
+    }
+  );
+
 const dataSlice = createSlice({
     name:"data",
     initialState: initialState,
@@ -71,30 +96,7 @@ const dataSlice = createSlice({
     },
 })
 
-export const getFormData = createAsyncThunk(
-    "GET/FORM/DATA",
-    async()=>{
-        try {
-            const response = await axios.get("https://ulventech-react-exam.netlify.app/api/form")
-            return response.data.data
-        } catch (error) {
-            console.log("Error: ",error)
-        }
-    }
-)
 
-export const postFormData = createAsyncThunk(
-    "POST/FORM/DATA",
-    async (formInfo: { [key: string]: string }) => {
-      try {
-        const response = await axios.post("https://ulventech-react-exam.netlify.app/api/form", formInfo);
-        console.log(response.data,"response");
-        return response.data
-      } catch (error) {
-        console.log("Error: ", error);
-      }
-    }
-  );
 
 export default dataSlice.reducer
 
