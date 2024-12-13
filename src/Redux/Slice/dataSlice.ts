@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 interface InitialState {
     formData: {fieldName:string,
@@ -13,6 +14,7 @@ interface InitialState {
     isFormLoading:boolean,
     isFormSuccess:boolean,
     isFormError:boolean,
+    formErrorMassage:string
 }
 const initialState: InitialState = {
     formData:[],
@@ -22,7 +24,8 @@ const initialState: InitialState = {
     formFields:{},
     isFormLoading:false,
     isFormSuccess:false,
-    isFormError:false
+    isFormError:false,
+    formErrorMassage:"" 
 }
 
 export const getFormData = createAsyncThunk(
@@ -31,7 +34,7 @@ export const getFormData = createAsyncThunk(
         try {
             const response = await axios.get("https://ulventech-react-exam.netlify.app/api/form")
             return response.data.data
-        } catch (error) {
+        } catch (error:any) {
             console.log("Error: ",error)
         }
     }
@@ -39,13 +42,13 @@ export const getFormData = createAsyncThunk(
 
 export const postFormData = createAsyncThunk(
     "POST/FORM/DATA",
-    async (formInfo: { [key: string]: string }) => {
+    async (formInfo: { [key: string]: string },{ rejectWithValue }) => {
       try {
         const response = await axios.post("https://ulventech-react-exam.netlify.app/api/form", formInfo);
-        console.log(response.data,"response");
         return response.data
-      } catch (error) {
-        console.log("Error: ", error);
+      } catch (error:any) {
+        toast.error(error?.response?.data?.message)
+        return rejectWithValue(error?.response)
       }
     }
   );
@@ -82,16 +85,18 @@ const dataSlice = createSlice({
             state.isFormSuccess = false;
             state.isFormError = false
         })
-        .addCase(postFormData.fulfilled,(state,action)=>{
+        .addCase(postFormData.fulfilled,(state,action:any)=>{
             state.isFormLoading = false;
             state.isFormSuccess = true;
             state.isFormError = false;
             state.formFields = action.payload
         })
-        .addCase(postFormData.rejected,(state,action)=>{
+        .addCase(postFormData.rejected,(state,action:any)=>{
             state.isFormLoading = false;
             state.isFormSuccess = false;
             state.isFormError = true;
+            state.formErrorMassage = action.payload.data.message
+            // console.log(action.payload.data.message,"from rejected")
         })
     },
 })
