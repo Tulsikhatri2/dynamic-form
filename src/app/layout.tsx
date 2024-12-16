@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import StoreProvider from "./storeProvider";
+import { Toaster } from "react-hot-toast";
+import { Ruda, Indie_Flower, Roboto } from "next/font/google"
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -13,6 +15,24 @@ const geistMono = localFont({
   variable: "--font-geist-mono",
   weight: "100 900",
 });
+
+const indie = Indie_Flower({
+  subsets: ["latin"],   
+  variable: "--font-indie",
+  weight: "400",
+});
+
+const ruda = Ruda({
+  subsets: ["latin"],
+  variable: "--font-ruda",
+  weight: "400", 
+});
+
+const roboto = Roboto({
+  subsets:["latin"],
+  variable:"--font-roboto",
+  weight:"500"
+})
 
 export const metadata: Metadata = {
   title: "Dynamic Form",
@@ -27,8 +47,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${indie.variable} ${ruda.variable} ${roboto.variable} antialiased`}
       >
+        <Toaster
+  position="top-right"
+  reverseOrder={false}
+/>
         <StoreProvider>
         {children}
         </StoreProvider>
