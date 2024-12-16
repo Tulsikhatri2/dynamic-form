@@ -3,7 +3,9 @@ import { Box, MenuItem, Select, TextareaAutosize, TextField } from '@mui/materia
 import React from 'react'
 import { useSelector } from 'react-redux'
 
+
 const Form = ({item,index, handleFieldChange}:any) => {
+
   const {isFormLoading} = useSelector((state:RootState)=>state.data)
 
   let inputElement;
@@ -18,14 +20,9 @@ const Form = ({item,index, handleFieldChange}:any) => {
           minRows={4}
           style={{
             border: `${isFormLoading ? "2px solid #959393" : "2px solid black"}`,
-            textAlign: "center",
-            paddingTop: "4vh",
-            fontWeight: "bold",
-            fontSize: "2.5vh",
-            fontFamily: "monospace",
             color: `${isFormLoading ? "#959393" : "black"}`,
           }}
-          disabled={isFormLoading}
+          className='textArea'
         />
       );
       break;
@@ -39,11 +36,9 @@ const Form = ({item,index, handleFieldChange}:any) => {
           type={item.type}
           onChange={(e) => handleFieldChange(index, e.target.value)}
           sx={{
-            width: "30vw",
-            fontFamily: "monospace",
-            fontWeight: "bold",
             border: `${isFormLoading ? "2px solid #ACABAB" : "2px solid black"}`,
           }}
+          className='selectOption'
           disabled={isFormLoading}
         >
           {item.options.map((option: any) => (
@@ -62,6 +57,7 @@ const Form = ({item,index, handleFieldChange}:any) => {
           name={item.fieldName}
           type={item.type}
           value={item.value}
+          disabled={isFormLoading}
           onChange={(e) => handleFieldChange(index, e.target.value)}
           sx={{
             "& .MuiOutlinedInput-root": {
@@ -82,15 +78,16 @@ const Form = ({item,index, handleFieldChange}:any) => {
               fontSize: "2vh",
             },
           }}
-          disabled={isFormLoading}
         />
       );
   }
 
   return (
+    <>
     <Box key={index} sx={{ marginTop: "5vh", display: "flex", flexDirection: "column" }}>
         {inputElement}
     </Box>
+    </>
   )
 }
 
