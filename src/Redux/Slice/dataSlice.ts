@@ -53,6 +53,10 @@ export const postFormData = createAsyncThunk(
     }
   );
 
+  export const dataFunction = () => {
+    console.log("data function")
+  }
+
 const dataSlice = createSlice({
     name:"data",
     initialState: initialState,
